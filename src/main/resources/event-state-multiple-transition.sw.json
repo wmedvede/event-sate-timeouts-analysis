@@ -1,0 +1,120 @@
+{
+  "id": "event_state_multiple_transition",
+  "version": "1.0",
+  "name": "Event State Multiple Transition",
+  "description": "Event State with multiple events with transition test",
+  "start": "StartState",
+  "events": [
+    {
+      "name": "event1",
+      "source": "",
+      "type": "event_state_event1_in"
+    },
+    {
+      "name": "event2",
+      "source": "",
+      "type": "event_state_event2_in"
+    },
+    {
+      "name": "event3",
+      "source": "",
+      "type": "event_state_event3_in"
+    }
+  ],
+  "functions": [
+    {
+      "name": "printMessage0",
+      "type": "custom",
+      "operation": "sysout"
+    },
+    {
+      "name": "printMessage1",
+      "type": "custom",
+      "operation": "sysout"
+    },
+    {
+      "name": "printMessage2",
+      "type": "custom",
+      "operation": "sysout"
+    },
+    {
+      "name": "printMessage3",
+      "type": "custom",
+      "operation": "sysout"
+    }
+  ],
+  "states": [
+    {
+      "name": "StartState",
+      "type": "operation",
+      "actions": [
+        {
+          "name": "startStateAction",
+          "functionRef": {
+            "refName": "printMessage0",
+            "arguments": {
+              "message": "${\"event_state_multiple_transition: \" + $WORKFLOW.instanceId + \" has started.\"}"
+            }
+          }
+        }
+      ],
+      "transition": "WaitForEvent"
+    },
+    {
+      "name": "WaitForEvent",
+      "type": "event",
+      "onEvents": [
+        {
+          "eventRefs": [
+            "event1",
+            "event2"
+          ],
+          "actions": [
+            {
+              "name": "printAfterEvent1Event2",
+              "functionRef": {
+                "refName": "printMessage1",
+                "arguments": {
+                  "message": "${\"event_state_multiple_transition: \" + $WORKFLOW.instanceId + \" event1 and event2 has arrived.\"}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "eventRefs": [
+            "event3"
+          ],
+          "actions": [
+            {
+              "name": "printAfterEvent3",
+              "functionRef": {
+                "refName": "printMessage2",
+                "arguments": {
+                  "message": "${\"event_state_multiple_transition: \" + $WORKFLOW.instanceId + \" event3 has arrived.\"}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "transition": "EndState"
+    },
+    {
+      "name": "EndState",
+      "type": "operation",
+      "actions": [
+        {
+          "name": "endStateAction",
+          "functionRef": {
+            "refName": "printMessage3",
+            "arguments": {
+              "message": "${\"event_state_multiple_transition: \" + $WORKFLOW.instanceId + \" has finished.\"}"
+            }
+          }
+        }
+      ],
+      "end": true
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "id": "event_state_multiple_end_exclusive_false",
+  "version": "1.0",
+  "name": "Event State Multiple End Exclusive False",
+  "description": "Event State with multiple events and end test (exclusive = false)",
+  "start": "StartState",
+  "events": [
+    {
+      "name": "event1",
+      "source": "",
+      "type": "event_state_event1_in"
+    },
+    {
+      "name": "event2",
+      "source": "",
+      "type": "event_state_event2_in"
+    },
+    {
+      "name": "event3",
+      "source": "",
+      "type": "event_state_event3_in"
+    }
+  ],
+  "functions": [
+    {
+      "name": "printMessage0",
+      "type": "custom",
+      "operation": "sysout"
+    },
+    {
+      "name": "printMessage1",
+      "type": "custom",
+      "operation": "sysout"
+    },
+    {
+      "name": "printMessage2",
+      "type": "custom",
+      "operation": "sysout"
+    },
+    {
+      "name": "printMessage3",
+      "type": "custom",
+      "operation": "sysout"
+    }
+  ],
+  "states": [
+    {
+      "name": "StartState",
+      "type": "operation",
+      "actions": [
+        {
+          "name": "startStateAction",
+          "functionRef": {
+            "refName": "printMessage0",
+            "arguments": {
+              "message": "${\"event_state_multiple_end_exclusive_false: \" + $WORKFLOW.instanceId + \" has started.\"}"
+            }
+          }
+        }
+      ],
+      "transition": "WaitForEvent"
+    },
+    {
+      "name": "WaitForEvent",
+      "type": "event",
+      "onEvents": [
+        {
+          "eventRefs": [
+            "event1",
+            "event2"
+          ],
+          "actions": [
+            {
+              "name": "printAfterEvent1Event2",
+              "functionRef": {
+                "refName": "printMessage1",
+                "arguments": {
+                  "message": "${\"event_state_multiple_end_exclusive_false: \" + $WORKFLOW.instanceId + \" event1 and event2 has arrived.\"}"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "eventRefs": [
+            "event3"
+          ],
+          "actions": [
+            {
+              "name": "printAfterEvent3",
+              "functionRef": {
+                "refName": "printMessage2",
+                "arguments": {
+                  "message": "${\"event_state_multiple_end_exclusive_false: \" + $WORKFLOW.instanceId + \" event3 has arrived.\"}"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "exclusive": false,
+      "end": true
+    }
+  ]
+}
